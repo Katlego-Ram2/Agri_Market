@@ -69,3 +69,18 @@ button:hover {
   color: #4CAF50;
   margin-bottom: 10px;
 }
+.links {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.links a {
+  color: #007bff;
+  text-decoration: none;
+  margin: 0 0.5rem;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
