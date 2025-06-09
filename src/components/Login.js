@@ -20,7 +20,7 @@ const Login = () => {
           </div>
           <button type="submit">Login</button> 
           <div className={styles.links}>
-            <a href="/forgot-password">Forgot Password?</a>
+            <a href="/forgot_password">Forgot Password?</a>
             <span> | </span>
             <a href="/register">Create Account</a>
           </div>
