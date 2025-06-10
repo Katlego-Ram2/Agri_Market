@@ -4,9 +4,11 @@ import {
   FaSignOutAlt, 
   FaArrowLeft, 
   FaArrowRight, 
-  FaClipboardList, 
-  FaBoxes, 
-  FaTimesCircle 
+   FaHorse,       // for Livestock Animals (can use FaDog or FaCow icon)
+  FaAppleAlt,  // for Fresh Produce (fruit icon)
+  FaHeadset,   // Support
+  FaBell,      // Notifications
+  FaTags       // Offers
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
@@ -32,19 +34,29 @@ const Sidebar = ({ isOpen, toggleSidebar, onSelect }) => {
           {isOpen && <span className="label">Profile</span>}
         </a>
 
-        <a href="#audit-trail" onClick={() => onSelect('auditTrail')}>
-          <FaClipboardList className="icon" />
-          {isOpen && <span className="label">Audit Trail</span>}
+        <a href="#livestock" onClick={() => onSelect('livestock')}>
+           <FaHorse className="icon" />
+          {isOpen && <span className="label">Livestock Animals</span>}
         </a>
 
-        <a href="#stock" onClick={() => onSelect('stock')}>
-          <FaBoxes className="icon" />
-          {isOpen && <span className="label">Stock in Market</span>}
+        <a href="#produce" onClick={() => onSelect('produce')}>
+          <FaAppleAlt className="icon" />
+          {isOpen && <span className="label">Fresh Produce</span>}
         </a>
 
-        <a href="#rejected-stock" onClick={() => onSelect('rejectedStock')}>
-          <FaTimesCircle className="icon" />
-          {isOpen && <span className="label">Rejected Stock</span>}
+        <a href="#support" onClick={() => onSelect('support')}>
+          <FaHeadset className="icon" />
+          {isOpen && <span className="label">Support</span>}
+        </a>
+
+        <a href="#notifications" onClick={() => onSelect('notifications')}>
+          <FaBell className="icon" />
+          {isOpen && <span className="label">Notifications</span>}
+        </a>
+
+        <a href="#offers" onClick={() => onSelect('offers')}>
+          <FaTags className="icon" />
+          {isOpen && <span className="label">Offers</span>}
         </a>
 
         <a href="#logout" onClick={handleLogout}>

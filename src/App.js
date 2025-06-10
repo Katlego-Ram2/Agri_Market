@@ -4,6 +4,8 @@ import Welcome from './components/Welcome';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard'; 
+import CustomerDashboard from './components/CustomerDashboard';
+import SupplierDashboard from './components/SupplierDashboard';  
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} /> 
+        <Route path="/customerdashboard" element={<CustomerDashboard />} />
+        <Route path="/supplierdashboard" element={<SupplierDashboard />} /> 
       </Routes>
     </Router>
   );

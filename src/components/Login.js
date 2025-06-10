@@ -18,7 +18,12 @@ const Login = () => {
             <FaLock className={styles.icon} />
             <input type="password" placeholder="Password" />
           </div>
-          <button type="submit">Login</button>
+          <button type="submit">Login</button> 
+          <div className={styles.links}>
+            <a href="/forgot-password">Forgot Password?</a>
+            <span> | </span>
+            <a href="/register">Create Account</a>
+          </div>
         </form>
       </div>
     </div>

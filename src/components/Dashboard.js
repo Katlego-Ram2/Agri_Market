@@ -11,24 +11,29 @@ const Dashboard = () => {
     setSidebarOpen(!isSidebarOpen);
   };
 
-  const renderDetails = () => {
-    switch (selectedDetail) {
-      case 'users':
-        return <p>👥 150 Active Users registered this month.</p>;
-      case 'requests':
-        return <p>📦 32 New Requests have been submitted.</p>;
-      case 'cashin':
-        return <p>💰 Cash Inflow: R12,500 from recent sales.</p>;
-      case 'analytics':
-        return <p>📊 View analytics dashboard for insights.</p>;
-      default:
-        return <p>Select a card above to view details.</p>;
-    }
-  };
+const renderDetails = () => {
+  switch (selectedDetail) {
+    case 'requestToSupply':
+      return <p>📬 View and manage your requests to supply products.</p>;
+    case 'purchasedStock':
+      return <p>🛒 Stock purchased by you (supplier) listed here.</p>;
+    case 'requests':
+      return <p>📦 32 New Requests have been submitted.</p>;
+    case 'stock':
+      return <p>📦 Current Stock available in the market.</p>;
+    case 'rejectedStock':
+      return <p>❌ List of Rejected Stock items.</p>;
+    case 'profile':
+      return <p>👤 User Profile information goes here.</p>;
+    default:
+      return <p>Select a card or sidebar item to view details.</p>;
+  }
+};
+
 
   return (
     <div className="dashboard">
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} onSelect={setSelectedDetail} />
       <div className="main-content">
         <TopCards onCardClick={setSelectedDetail} />
         <div className="container">
