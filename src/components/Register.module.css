@@ -19,6 +19,62 @@
   backdrop-filter: blur(10px); /* Optional: adds a frosted glass effect */
   -webkit-backdrop-filter: blur(10px); /* Safari support */
 }
+.select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+}
+.inputGroup {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border 0.3s ease;
+}
+
+.inputGroupError {
+  border: 2px solid red;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin: -6px 0 8px 32px;
+}
+
+.inputGroup {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  transition: border 0.3s ease;
+}
+
+.inputGroupError {
+  border: 2px solid red;
+}
+.inputGroupError {
+  border: 1px solid red;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.passwordChecklist {
+  margin-top: 5px;
+  padding-left: 1.5rem;
+  color: red;
+  font-size: 0.85rem;
+  list-style: none;
+}
+.passwordChecklist li {
+  margin: 3px 0;
+}
 
 h2 {
   margin-bottom: 20px;
