@@ -19,11 +19,42 @@ const renderDetails = () => {
     case 'analytics':
       return <p>📊 View analytics dashboard for insights.</p>;
     case 'education':
-      return <p>📚 Education</p>;
+      return (
+        <div>
+          <h3>📚 Education Videos</h3>
+          <p>Learn how to properly care for your animals and fresh produce:</p>
+          
+          <div className="video-list">
+            <div className="video-item">
+              <h4>How to Take Care of Livestock</h4>
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/QYxUNJ6qm8Y?si=GBdGFQ1ReK6Dzs5J" 
+              title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;
+               picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            
+            <div className="video-item">
+              <h4>Fresh Produce Handling Tips</h4>
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/n7jWt7IF3QY?si=Bc15az-1B6_5hMjU" 
+              title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+               gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+
+               </iframe>
+            </div>
+
+            <div className="video-item">
+              <h4>General Farm Stock Care</h4>
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/Q_nO-kuImkc?si=vGbLCdF1fDs6Fw22" 
+              title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+               referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      );
     default:
       return <p>Select a card or sidebar item to view details.</p>;
   }
 };
+
 
 
   return (

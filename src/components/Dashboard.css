@@ -143,6 +143,19 @@ body, html, #root {
   box-shadow: 0 2px 6px rgba(221, 212, 212, 0.1);
   overflow-y: auto;
 }
+.video-list {
+  display: flex;           /* Arrange videos in a row */
+  flex-wrap: wrap;         /* Wrap to next line if not enough space */
+  gap: 20px;               /* Space between videos */
+  justify-content: center; /* Center the videos horizontally */
+  margin-top: 20px;
+}
+
+.video-item {
+  flex: 1 1 300px;         /* Flexible width, min 300px */
+  max-width: 560px;        /* Limit max width */
+  box-sizing: border-box;
+}
 
 
 
