@@ -12,8 +12,8 @@ const SupplierTopCards = ({ onCardClick }) => {
       <div className="card" onClick={() => onCardClick('analytics')}>
         📊 Analytics
       </div>
-      <div className="card" onClick={() => onCardClick('profile')}>
-        👤 Profile
+      <div className="card" onClick={() => onCardClick('education')}>
+        📚 Education
       </div>
     </div>
   );
