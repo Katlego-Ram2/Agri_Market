@@ -4,6 +4,7 @@ import CustomerTopCards from './CustomerTopCards';
 import ShoppingCartModal from './ShoppingCartModal';
 import PurchaseHistory from './PurchaseHistory';  // existing
 import AnalyticsDashboard from './AnalyticsDashboard'; // new import
+import Profile from './Profile';  // new import
 import './Dashboard.css';
 
 const StockTable = ({ stocks }) => {
@@ -123,78 +124,72 @@ const CustomerDashboard = () => {
     { date: '2025-05-05', item: 'Goats', quantity: 5, price: 2500 },
   ];
 
- const renderLandingScreen = () => {
-  const styles = {
-    container: {
-      textAlign: 'center',
-      padding: '40px 20px',
-      backgroundColor: '#E8F5E9',
-      borderRadius: '12px',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      maxWidth: '400px',
-      margin: '30px auto',
-      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      color: '#2E7D32',
-    },
-    title: {
-      fontSize: '28px',
-      fontWeight: '700',
-      marginBottom: '12px',
-    },
-    subtitle: {
-      fontSize: '16px',
-      marginBottom: '25px',
-      color: '#4CAF50',
-    },
-    buttonGroup: {
-      display: 'flex',
-      justifyContent: 'center',
-      gap: '15px',
-    },
-    button: {
-      backgroundColor: '#4CAF50',
-      color: 'white',
-      border: 'none',
-      padding: '12px 24px',
-      fontSize: '16px',
-      fontWeight: '600',
-      borderRadius: '8px',
-      cursor: 'pointer',
-      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-      transition: 'background-color 0.3s ease',
-      userSelect: 'none',
-    },
-    buttonHover: {
-      backgroundColor: '#388E3C',
-    }
-  };
+  const renderLandingScreen = () => {
+    const styles = {
+      container: {
+        textAlign: 'center',
+        padding: '40px 20px',
+        backgroundColor: '#E8F5E9',
+        borderRadius: '12px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        maxWidth: '400px',
+        margin: '30px auto',
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        color: '#2E7D32',
+      },
+      title: {
+        fontSize: '28px',
+        fontWeight: '700',
+        marginBottom: '12px',
+      },
+      subtitle: {
+        fontSize: '16px',
+        marginBottom: '25px',
+        color: '#4CAF50',
+      },
+      buttonGroup: {
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '15px',
+      },
+      button: {
+        backgroundColor: '#4CAF50',
+        color: 'white',
+        border: 'none',
+        padding: '12px 24px',
+        fontSize: '16px',
+        fontWeight: '600',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+        transition: 'background-color 0.3s ease',
+        userSelect: 'none',
+      }
+    };
 
-  // Optional: If you want hover effect inline (requires React state or a lib), but simple is fine
-
-  return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>🛒 Welcome to Agri Market</h2>
-      <p style={styles.subtitle}>Choose a category to get started</p>
-      <div style={styles.buttonGroup}>
-        <button
-          onClick={() => setSelectedDetail('livestock')}
-          style={styles.button}
-          type="button"
-        >
-          🐄 Livestock
-        </button>
-        <button
-          onClick={() => setSelectedDetail('freshproduce')}
-          style={styles.button}
-          type="button"
-        >
-          🥬 Fresh Produce
-        </button>
+    return (
+      <div style={styles.container}>
+        <h2 style={styles.title}>🛒 Welcome to Agri Market</h2>
+        <p style={styles.subtitle}>Choose a category to get started</p>
+        <div style={styles.buttonGroup}>
+          <button
+            onClick={() => setSelectedDetail('livestock')}
+            style={styles.button}
+            type="button"
+          >
+            🐄 Livestock
+          </button>
+          <button
+            onClick={() => setSelectedDetail('freshproduce')}
+            style={styles.button}
+            type="button"
+          >
+            🥬 Fresh Produce
+          </button>
+        </div>
       </div>
-    </div>
-  );
-};
-
+    );
+  };
 
   const renderDetails = () => {
     switch (selectedDetail) {
@@ -206,6 +201,8 @@ const CustomerDashboard = () => {
         return <PurchaseHistory history={purchaseHistoryData} />;
       case 'analytics':
         return <AnalyticsDashboard />;
+      case 'profile':       // Added profile case here
+        return <Profile />;
       default:
         return renderLandingScreen();
     }

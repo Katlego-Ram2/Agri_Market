@@ -4,8 +4,8 @@ import {
   FaSignOutAlt, 
   FaArrowLeft, 
   FaArrowRight, 
-  FaHorse,       // for Livestock Animals (can use FaDog or FaCow icon)
-  FaAppleAlt,    // for Fresh Produce (fruit icon)
+  FaHorse,       // Livestock Animals icon
+  FaAppleAlt,    // Fresh Produce icon
   FaHeadset,     // Support
   FaBell,        // Notifications
   FaTags         // Offers
@@ -24,17 +24,21 @@ const SupplierSidebar = ({ isOpen, toggleSidebar, onSelect }) => {
 
   return (
     <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
-      <button className="sidebar-toggle" onClick={toggleSidebar}>
+      <button
+        className="sidebar-toggle"
+        onClick={toggleSidebar}
+        aria-label={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+      >
         {isOpen ? <FaArrowLeft /> : <FaArrowRight />}
       </button>
 
-      <div className="sidebar-links">
+      <nav className="sidebar-links" aria-label="Supplier sidebar navigation">
         <a href="#profile" onClick={() => onSelect('profile')}>
           <FaUser className="icon" />
           {isOpen && <span className="label">Profile</span>}
         </a>
 
-        <a href="#livestock" onClick={() => onSelect('livestock')}>
+        {/* <a href="#livestock" onClick={() => onSelect('livestock')}>
           <FaHorse className="icon" />
           {isOpen && <span className="label">Livestock Animals</span>}
         </a>
@@ -42,7 +46,7 @@ const SupplierSidebar = ({ isOpen, toggleSidebar, onSelect }) => {
         <a href="#produce" onClick={() => onSelect('produce')}>
           <FaAppleAlt className="icon" />
           {isOpen && <span className="label">Fresh Produce</span>}
-        </a>
+        </a> */}
 
         <a href="#support" onClick={() => onSelect('support')}>
           <FaHeadset className="icon" />
@@ -63,7 +67,7 @@ const SupplierSidebar = ({ isOpen, toggleSidebar, onSelect }) => {
           <FaSignOutAlt className="icon" />
           {isOpen && <span className="label">Logout</span>}
         </a>
-      </div>
+      </nav>
     </div>
   );
 };

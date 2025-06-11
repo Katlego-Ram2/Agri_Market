@@ -1,17 +1,17 @@
 import React from 'react';
 
 const summaryMetrics = [
-  { label: 'Total Purchases This Month', value: 'R 22,000', icon: '🛒' },
-  { label: 'Livestock Purchased', value: '5', icon: '🐄' },
-  { label: 'Produce Purchased (kg)', value: '120', icon: '🥬' },
-  { label: 'Orders Made', value: '12', icon: '📦' },
-  { label: 'Avg Spend Per Order', value: 'R 1,833', icon: '📊' },
+  { label: 'Total Supplied This Month', value: 'R 98,500', icon: '🚚' },
+  { label: 'Livestock Supplied', value: '130', icon: '🐄' },
+  { label: 'Produce Supplied (kg)', value: '1750', icon: '🥬' },
+  { label: 'Successful Deliveries', value: '120', icon: '✅' },
+  { label: 'Avg Supply Value', value: 'R 820', icon: '💹' },
 ];
 
 const progressData = [
-  { label: 'Livestock Purchase Goal', progress: 50 },
-  { label: 'Produce Purchase Goal', progress: 90 },
-  { label: 'Order Frequency Goal', progress: 70 },
+  { label: 'Livestock Supply Target', progress: 68 },
+  { label: 'Produce Supply Target', progress: 79 },
+  { label: 'Delivery Success Rate', progress: 90 },
 ];
 
 const styles = {
@@ -26,6 +26,7 @@ const styles = {
     marginBottom: '20px',
     fontWeight: '700',
     fontSize: '28px',
+    textAlign: 'center',
   },
   summaryCards: {
     display: 'flex',
@@ -98,10 +99,10 @@ const ProgressBar = ({ progress }) => (
   </div>
 );
 
-export default function AnalyticsDashboard() {
+export default function SupplierAnalytics() {
   return (
     <div style={styles.container}>
-      <h2 style={styles.header}>📊 Your Purchase Analytics</h2>
+      <h2 style={styles.header}>📈 Supplier Analytics Dashboard</h2>
 
       <div style={styles.summaryCards}>
         {summaryMetrics.map(({ label, value, icon }) => (
@@ -113,7 +114,7 @@ export default function AnalyticsDashboard() {
         ))}
       </div>
 
-      <h3 style={styles.progressHeader}>Progress Toward Your Goals</h3>
+      <h3 style={styles.progressHeader}>Progress Toward Supply Goals</h3>
       <div style={styles.progressContainer}>
         {progressData.map(({ label, progress }) => (
           <div key={label} style={styles.progressItem}>

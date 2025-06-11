@@ -16,8 +16,11 @@ const Register = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [passwordTouched, setPasswordTouched] = useState(false);
-const [confirmTouched, setConfirmTouched] = useState(false);
+  const [confirmTouched, setConfirmTouched] = useState(false);
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^[0-9]{10,15}$/;
 
@@ -75,18 +78,67 @@ const [confirmTouched, setConfirmTouched] = useState(false);
     validateField(name, value);
 
     if (name === 'password' || name === 'confirmPassword') {
-      validateField('confirmPassword', name === 'password' ? formData.confirmPassword : value);
+      validateField(
+        'confirmPassword',
+        name === 'password' ? formData.confirmPassword : value
+      );
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    Object.keys(formData).forEach((field) => validateField(field, formData[field]));
+    setServerError(null);
+    setSuccessMessage(null);
 
+    // Validate all fields before submitting
+    Object.keys(formData).forEach((field) =>
+      validateField(field, formData[field])
+    );
+
+    // Check if there are any errors
     const hasErrors = Object.values(errors).some((error) => error);
-    if (!hasErrors && Object.values(formData).every((val) => val !== '')) {
-      console.log('Form submitted', formData);
-      // Add your submission logic
+    if (hasErrors) {
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage('Registration successful! You can now login.');
+        setFormData({
+          fullName: '',
+          username: '',
+          email: '',
+          phone: '',
+          communication: '',
+          password: '',
+          confirmPassword: '',
+        });
+        setErrors({});
+        setPasswordTouched(false);
+        setConfirmTouched(false);
+      } else {
+        if (data.errors) {
+          // Show validation errors from server
+          setErrors(data.errors);
+        } else if (data.message) {
+          setServerError(data.message);
+        } else {
+          setServerError('Registration failed. Please try again.');
+        }
+      }
+    } catch (error) {
+      setServerError('Network error. Please try again later.');
+      console.error('Registration error:', error);
     }
   };
 
@@ -104,52 +156,116 @@ const [confirmTouched, setConfirmTouched] = useState(false);
       <div className={styles.container}>
         <GiGrain className={styles.iconTop} />
         <h2>Register</h2>
-        <form className={styles.form} onSubmit={handleSubmit} noValidate>
 
+        {serverError && <p className={styles.serverError}>{serverError}</p>}
+        {successMessage && <p className={styles.success}>{successMessage}</p>}
+
+        <form className={styles.form} onSubmit={handleSubmit} noValidate>
           {/* Full Name */}
-          <div className={classNames(styles.inputGroup, { [styles.inputGroupError]: errors.fullName })}>
+          <div
+            className={classNames(styles.inputGroup, {
+              [styles.inputGroupError]: errors.fullName,
+            })}
+          >
             <FaUser className={styles.icon} />
-            <input name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} />
+            <input
+              name="fullName"
+              placeholder="Full Name"
+              value={formData.fullName}
+              onChange={handleChange}
+            />
           </div>
           {errors.fullName && <p className={styles.error}>{errors.fullName}</p>}
 
           {/* Username */}
-          <div className={classNames(styles.inputGroup, { [styles.inputGroupError]: errors.username })}>
+          <div
+            className={classNames(styles.inputGroup, {
+              [styles.inputGroupError]: errors.username,
+            })}
+          >
             <FaUser className={styles.icon} />
-            <input name="username" placeholder="Username" value={formData.username} onChange={handleChange} />
+            <input
+              name="username"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleChange}
+            />
           </div>
           {errors.username && <p className={styles.error}>{errors.username}</p>}
 
           {/* Email */}
-          <div className={classNames(styles.inputGroup, { [styles.inputGroupError]: errors.email })}>
+          <div
+            className={classNames(styles.inputGroup, {
+              [styles.inputGroupError]: errors.email,
+            })}
+          >
             <FaEnvelope className={styles.icon} />
-            <input name="email" type="email" placeholder="Email" value={formData.email} onChange={handleChange} />
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+            />
           </div>
           {errors.email && <p className={styles.error}>{errors.email}</p>}
 
           {/* Phone */}
-          <div className={classNames(styles.inputGroup, { [styles.inputGroupError]: errors.phone })}>
+          <div
+            className={classNames(styles.inputGroup, {
+              [styles.inputGroupError]: errors.phone,
+            })}
+          >
             <FaPhone className={styles.icon} />
-            <input name="phone" type="tel" placeholder="Contact Number" value={formData.phone} onChange={handleChange} />
+            <input
+              name="phone"
+              type="tel"
+              placeholder="Contact Number"
+              value={formData.phone}
+              onChange={handleChange}
+            />
           </div>
           {errors.phone && <p className={styles.error}>{errors.phone}</p>}
 
           {/* Communication Method */}
-          <div className={classNames(styles.inputGroup, { [styles.inputGroupError]: errors.communication })}>
+          <div
+            className={classNames(styles.inputGroup, {
+              [styles.inputGroupError]: errors.communication,
+            })}
+          >
             <FaComments className={styles.icon} />
-            <select name="communication" value={formData.communication} onChange={handleChange} className={styles.select}>
-              <option value="" disabled>Select Communication Method</option>
+            <select
+              name="communication"
+              value={formData.communication}
+              onChange={handleChange}
+              className={styles.select}
+            >
+              <option value="" disabled>
+                Select Communication Method
+              </option>
               <option value="email">Email</option>
               <option value="phone">Phone Call</option>
               <option value="whatsapp">WhatsApp</option>
             </select>
           </div>
-          {errors.communication && <p className={styles.error}>{errors.communication}</p>}
+          {errors.communication && (
+            <p className={styles.error}>{errors.communication}</p>
+          )}
 
           {/* Password */}
-          <div className={classNames(styles.inputGroup, { [styles.inputGroupError]: errors.password })}>
+          <div
+            className={classNames(styles.inputGroup, {
+              [styles.inputGroupError]: errors.password,
+            })}
+          >
             <FaLock className={styles.icon} />
-            <input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} />
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+            />
           </div>
           {errors.password && <p className={styles.error}>{errors.password}</p>}
 
@@ -160,31 +276,33 @@ const [confirmTouched, setConfirmTouched] = useState(false);
               {!passwordRules.uppercase && <li>➤ Must include an uppercase letter</li>}
               {!passwordRules.lowercase && <li>➤ Must include a lowercase letter</li>}
               {!passwordRules.number && <li>➤ Must include a number</li>}
-              {!passwordRules.special && <li>➤ Must include a special character (@$!%*?&)</li>}
+              {!passwordRules.special && (
+                <li>➤ Must include a special character (@$!%*?&)</li>
+              )}
             </ul>
           )}
 
-        {/* Confirm Password */}
-<div
-  className={classNames(styles.inputGroup, {
-    [styles.inputGroupError]: confirmTouched && errors.confirmPassword,
-  })}
->
-  <FaLock className={styles.icon} />
-  <input
-    name="confirmPassword"
-    type="password"
-    placeholder="Confirm Password"
-    value={formData.confirmPassword}
-    onChange={(e) => {
-      handleChange(e);
-      if (!confirmTouched) setConfirmTouched(true);
-    }}
-  />
-</div>
-{confirmTouched && errors.confirmPassword && (
-  <p className={styles.error}>{errors.confirmPassword}</p>
-)}
+          {/* Confirm Password */}
+          <div
+            className={classNames(styles.inputGroup, {
+              [styles.inputGroupError]: confirmTouched && errors.confirmPassword,
+            })}
+          >
+            <FaLock className={styles.icon} />
+            <input
+              name="confirmPassword"
+              type="password"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={(e) => {
+                handleChange(e);
+                if (!confirmTouched) setConfirmTouched(true);
+              }}
+            />
+          </div>
+          {confirmTouched && errors.confirmPassword && (
+            <p className={styles.error}>{errors.confirmPassword}</p>
+          )}
 
           <button type="submit">Register</button>
           <div className={styles.links}>
