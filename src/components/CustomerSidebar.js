@@ -39,7 +39,7 @@ const Sidebar = ({ isOpen, toggleSidebar, onSelect }) => {
           {isOpen && <span className="label">Livestock Animals</span>}
         </a>
 
-        <a href="#produce" onClick={() => onSelect('produce')}>
+        <a href="#produce" onClick={() => onSelect('freshproduce')}>
           <FaAppleAlt className="icon" />
           {isOpen && <span className="label">Fresh Produce</span>}
         </a>

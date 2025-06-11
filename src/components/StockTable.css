@@ -1,0 +1,44 @@
+.stock-table button {
+  padding: 4px 8px;
+  background-color: #3498db;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.stock-table button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.stock-table button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+.stock-table-container {
+  margin-top: 20px;
+}
+
+.stock-filter-input {
+  margin-bottom: 10px;
+  padding: 6px 8px;
+  width: 100%;
+  max-width: 400px;
+  font-size: 1rem;
+}
+
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stock-table th,
+.stock-table td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.stock-table th {
+  background-color: #f0f0f0;
+}
