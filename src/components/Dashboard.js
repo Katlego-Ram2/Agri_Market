@@ -1,47 +1,63 @@
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import TopCards from './TopCards';
+import AnalyticsDashboard from './AnalyticsDashboard';
+import CashInView from './CashInView';
+import RequestTable from './RequestTable';
+import EditableUserTable from './EditableUserTable';
+import AuditTrail from './AuditTrail';
+import StockInMarket from './StockInMarket'; 
+import RejectedStock from './RejectedStock';
+import Profile from './Profile';  // <-- Import Profile component
 import './Dashboard.css';
 
 const Dashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedDetail, setSelectedDetail] = useState(null);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
+  const toggleSidebar = () => setSidebarOpen(open => !open);
+
+  const handleSelect = (detail) => {
+    console.log('Selected detail:', detail);
+    setSelectedDetail(detail);
   };
 
-const renderDetails = () => {
-  switch (selectedDetail) {
-    case 'requestToSupply':
-      return <p>📬 View and manage your requests to supply products.</p>;
-    case 'purchasedStock':
-      return <p>🛒 Stock purchased by you (supplier) listed here.</p>;
-    case 'requests':
-      return <p>📦 32 New Requests have been submitted.</p>;
-    case 'stock':
-      return <p>📦 Current Stock available in the market.</p>;
-    case 'rejectedStock':
-      return <p>❌ List of Rejected Stock items.</p>;
-    case 'profile':
-      return <p>👤 User Profile information goes here.</p>;
-    default:
-      return <p>Select a card or sidebar item to view details.</p>;
-  }
-};
-
+  const renderDetails = () => {
+    switch (selectedDetail) {
+      case 'profile':
+        return <Profile />;  // <-- Show profile when selected
+      case 'users':
+        return <EditableUserTable />;
+      case 'requests':
+        return <RequestTable />;
+      case 'cashin':
+        return <CashInView />;
+      case 'analytics':
+        return <AnalyticsDashboard />;
+      case 'auditTrail':
+        return <AuditTrail />;
+      case 'stock':
+        return <StockInMarket />;
+      case 'rejectedStock':
+        return <RejectedStock />;
+      default:
+        return <p>Select a card or sidebar item to view details.</p>;
+    }
+  };
 
   return (
     <div className="dashboard">
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} onSelect={setSelectedDetail} />
+      <Sidebar
+        isOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
+        onSelect={handleSelect}
+      />
       <div className="main-content">
-        <TopCards onCardClick={setSelectedDetail} />
+        <TopCards onCardClick={handleSelect} />
         <div className="container">
           <h1 className="title">Agri Market</h1>
-          <p className="subtitle">This is where your content will appear</p>
-          <div className="details-box">
-            {renderDetails()}
-          </div>
+          <p className="subtitle">Your gateway to fresh produce and livestock</p>
+          <div className="details-box">{renderDetails()}</div>
         </div>
       </div>
     </div>
