@@ -4,11 +4,11 @@ import {
   FaSignOutAlt, 
   FaArrowLeft, 
   FaArrowRight, 
-   FaHorse,       // for Livestock Animals (can use FaDog or FaCow icon)
-  FaAppleAlt,  // for Fresh Produce (fruit icon)
-  FaHeadset,   // Support
-  FaBell,      // Notifications
-  FaTags       // Offers
+  FaHorse,       // for Livestock Animals
+  FaAppleAlt,    // for Fresh Produce
+  FaHeadset,     // Support
+  FaBell,        // Notifications
+  FaTags         // Offers
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
@@ -18,8 +18,8 @@ const Sidebar = ({ isOpen, toggleSidebar, onSelect }) => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    // Add logout logic if needed
-    navigate('/');
+    localStorage.clear(); // ✅ Clear user data from localStorage
+    navigate('/');        // 🔄 Redirect to homepage or login
   };
 
   return (
@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen, toggleSidebar, onSelect }) => {
         </a>
 
         <a href="#livestock" onClick={() => onSelect('livestock')}>
-           <FaHorse className="icon" />
+          <FaHorse className="icon" />
           {isOpen && <span className="label">Livestock Animals</span>}
         </a>
 

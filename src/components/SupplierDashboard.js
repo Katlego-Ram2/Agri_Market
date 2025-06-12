@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SupplierSidebar from './SupplierSidebar';
 import SupplierTopCards from './SupplierTopCards';
 import SupplierAnalytics from './SupplierAnalytics';
-import SupplierStockPurchased from './SupplierStockPurchased'; // ✅ NEW
-import Profile from './Profile';  // <-- Added import for Profile component
+import SupplierStockPurchased from './SupplierStockPurchased';
+import Profile from './Profile';
 import './Dashboard.css';
 
 const SupplierDashboard = () => {
+  const navigate = useNavigate();
+
+  // Redirect to login if user is not authenticated
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [selectedDetail, setSelectedDetail] = useState(null);
+  const [selectedDetail, setSelectedDetail] = useState('education');
   const [formData, setFormData] = useState({
     description: '',
     name: '',
@@ -31,24 +42,61 @@ const SupplierDashboard = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Submitted:', formData);
-    alert('Supply request submitted!');
-    setFormData({
-      description: '',
-      name: '',
-      category: '',
-      price: '',
-      numberPlate: '',
-      contact: '',
-      email: ''
-    });
+
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      alert('User ID not found. Please log in again.');
+      navigate('/login');
+      return;
+    }
+
+    const supplyRequest = {
+      userId: parseInt(userId),
+      description: formData.description,
+      productName: formData.name,
+      category: formData.category,
+      price: parseFloat(formData.price),
+      numberPlate: formData.numberPlate,
+      contact: formData.contact,
+      email: formData.email
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/supply-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(supplyRequest)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert('Supply request submitted!');
+        setFormData({
+          description: '',
+          name: '',
+          category: '',
+          price: '',
+          numberPlate: '',
+          contact: '',
+          email: ''
+        });
+      } else {
+        alert('Failed to submit: ' + result.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Something went wrong while submitting the request.');
+    }
   };
 
   const renderDetails = () => {
     switch (selectedDetail) {
-      case 'profile':               // <-- Added this case to render Profile
+      case 'profile':
         return <Profile />;
 
       case 'requestToSupply':
@@ -142,7 +190,7 @@ const SupplierDashboard = () => {
         );
 
       case 'stockPurchased':
-        return <SupplierStockPurchased />; // ✅ Renders the detailed stock list
+        return <SupplierStockPurchased />;
 
       case 'analytics':
         return <SupplierAnalytics />;
@@ -162,8 +210,7 @@ const SupplierDashboard = () => {
                   src="https://www.youtube.com/embed/QYxUNJ6qm8Y?si=GBdGFQ1ReK6Dzs5J"
                   title="YouTube video player"
                   frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
               </div>
@@ -176,8 +223,7 @@ const SupplierDashboard = () => {
                   src="https://www.youtube.com/embed/n7jWt7IF3QY?si=Bc15az-1B6_5hMjU"
                   title="YouTube video player"
                   frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
               </div>
@@ -190,8 +236,7 @@ const SupplierDashboard = () => {
                   src="https://www.youtube.com/embed/Q_nO-kuImkc?si=vGbLCdF1fDs6Fw22"
                   title="YouTube video player"
                   frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
               </div>

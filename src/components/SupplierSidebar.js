@@ -18,8 +18,8 @@ const SupplierSidebar = ({ isOpen, toggleSidebar, onSelect }) => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    // Add logout logic if needed
-    navigate('/');
+    localStorage.clear(); // ✅ Clear localStorage on logout
+    navigate('/');        // 🔄 Redirect to home or login page
   };
 
   return (
@@ -38,7 +38,8 @@ const SupplierSidebar = ({ isOpen, toggleSidebar, onSelect }) => {
           {isOpen && <span className="label">Profile</span>}
         </a>
 
-        {/* <a href="#livestock" onClick={() => onSelect('livestock')}>
+        {/* Uncomment if you decide to use these in future
+        <a href="#livestock" onClick={() => onSelect('livestock')}>
           <FaHorse className="icon" />
           {isOpen && <span className="label">Livestock Animals</span>}
         </a>
@@ -46,7 +47,8 @@ const SupplierSidebar = ({ isOpen, toggleSidebar, onSelect }) => {
         <a href="#produce" onClick={() => onSelect('produce')}>
           <FaAppleAlt className="icon" />
           {isOpen && <span className="label">Fresh Produce</span>}
-        </a> */}
+        </a>
+        */}
 
         <a href="#support" onClick={() => onSelect('support')}>
           <FaHeadset className="icon" />

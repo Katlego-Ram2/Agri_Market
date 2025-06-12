@@ -24,7 +24,7 @@ const Register = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^[0-9]{10,15}$/;
 
-  const validateField = (name, value) => {
+  const validateField = (name, value, allFormData = formData) => {
     let error = '';
 
     switch (name) {
@@ -51,16 +51,23 @@ const Register = () => {
         break;
       case 'confirmPassword':
         if (!value) error = 'Please confirm your password';
-        else if (value !== formData.password) error = 'Passwords do not match';
+        else if (value !== allFormData.password) error = 'Passwords do not match';
         break;
       default:
         break;
     }
 
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: error,
-    }));
+    return error;
+  };
+
+  // Validate entire form; returns errors object
+  const validateForm = (data) => {
+    const newErrors = {};
+    Object.keys(data).forEach((field) => {
+      const error = validateField(field, data[field], data);
+      if (error) newErrors[field] = error;
+    });
+    return newErrors;
   };
 
   const handleChange = (e) => {
@@ -70,19 +77,31 @@ const Register = () => {
       setPasswordTouched(true);
     }
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    validateField(name, value);
-
-    if (name === 'password' || name === 'confirmPassword') {
-      validateField(
-        'confirmPassword',
-        name === 'password' ? formData.confirmPassword : value
-      );
+    if (name === 'confirmPassword' && !confirmTouched) {
+      setConfirmTouched(true);
     }
+
+    const updatedFormData = {
+      ...formData,
+      [name]: value,
+    };
+
+    setFormData(updatedFormData);
+
+    // Validate current field and confirmPassword if password changes
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      const fieldError = validateField(name, value, updatedFormData);
+      if (fieldError) newErrors[name] = fieldError;
+      else delete newErrors[name];
+
+      if (name === 'password' || name === 'confirmPassword') {
+        const confirmError = validateField('confirmPassword', updatedFormData.confirmPassword, updatedFormData);
+        if (confirmError) newErrors.confirmPassword = confirmError;
+        else delete newErrors.confirmPassword;
+      }
+      return newErrors;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -90,23 +109,19 @@ const Register = () => {
     setServerError(null);
     setSuccessMessage(null);
 
-    // Validate all fields before submitting
-    Object.keys(formData).forEach((field) =>
-      validateField(field, formData[field])
-    );
+    // Validate entire form on submit
+    const validationErrors = validateForm(formData);
+    setErrors(validationErrors);
 
-    // Check if there are any errors
-    const hasErrors = Object.values(errors).some((error) => error);
-    if (hasErrors) {
+    if (Object.keys(validationErrors).length > 0) {
+      // If errors, don't submit
       return;
     }
 
     try {
       const response = await fetch('http://localhost:5000/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
@@ -128,7 +143,6 @@ const Register = () => {
         setConfirmTouched(false);
       } else {
         if (data.errors) {
-          // Show validation errors from server
           setErrors(data.errors);
         } else if (data.message) {
           setServerError(data.message);
@@ -150,6 +164,17 @@ const Register = () => {
     number: /\d/.test(password),
     special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
   };
+
+  // Disable submit if there are errors or required fields empty
+  const isSubmitDisabled =
+    Object.values(errors).some(Boolean) ||
+    !formData.fullName.trim() ||
+    !formData.username.trim() ||
+    !formData.email.trim() ||
+    !formData.phone.trim() ||
+    !formData.communication ||
+    !formData.password ||
+    !formData.confirmPassword;
 
   return (
     <div className={styles.page}>
@@ -173,6 +198,7 @@ const Register = () => {
               placeholder="Full Name"
               value={formData.fullName}
               onChange={handleChange}
+              autoComplete="name"
             />
           </div>
           {errors.fullName && <p className={styles.error}>{errors.fullName}</p>}
@@ -189,6 +215,7 @@ const Register = () => {
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
+              autoComplete="username"
             />
           </div>
           {errors.username && <p className={styles.error}>{errors.username}</p>}
@@ -206,6 +233,7 @@ const Register = () => {
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
+              autoComplete="email"
             />
           </div>
           {errors.email && <p className={styles.error}>{errors.email}</p>}
@@ -223,6 +251,7 @@ const Register = () => {
               placeholder="Contact Number"
               value={formData.phone}
               onChange={handleChange}
+              autoComplete="tel"
             />
           </div>
           {errors.phone && <p className={styles.error}>{errors.phone}</p>}
@@ -239,6 +268,7 @@ const Register = () => {
               value={formData.communication}
               onChange={handleChange}
               className={styles.select}
+              autoComplete="off"
             >
               <option value="" disabled>
                 Select Communication Method
@@ -265,6 +295,7 @@ const Register = () => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
+              autoComplete="new-password"
             />
           </div>
           {errors.password && <p className={styles.error}>{errors.password}</p>}
@@ -298,13 +329,17 @@ const Register = () => {
                 handleChange(e);
                 if (!confirmTouched) setConfirmTouched(true);
               }}
+              autoComplete="new-password"
             />
           </div>
           {confirmTouched && errors.confirmPassword && (
             <p className={styles.error}>{errors.confirmPassword}</p>
           )}
 
-          <button type="submit">Register</button>
+          <button type="submit" disabled={isSubmitDisabled}>
+            Register
+          </button>
+
           <div className={styles.links}>
             <a href="/login">Already have an account? Login</a>
           </div>

@@ -11,13 +11,13 @@ const Login = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState('');
 
   const validateField = (name, value) => {
     let error = '';
     if (!value.trim()) {
       error = `${name === 'username' ? 'Username' : 'Password'} is required`;
     }
-
     setErrors((prev) => ({
       ...prev,
       [name]: error,
@@ -33,15 +33,39 @@ const Login = () => {
     validateField(name, value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     validateField('username', formData.username);
     validateField('password', formData.password);
 
     const hasErrors = Object.values(errors).some((error) => error);
     if (!hasErrors && formData.username && formData.password) {
-      console.log('Login submitted:', formData);
-      // Add login logic here
+      try {
+        const response = await fetch('http://localhost:5000/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          setServerError(data.message || 'Login failed');
+          return;
+        }
+
+        // Save user data to localStorage
+        localStorage.setItem('userId', data.userId);
+        localStorage.setItem('roleId', data.roleId);
+        localStorage.setItem('redirectPath', data.redirectPath);
+
+        // Redirect
+        window.location.href = data.redirectPath;
+
+      } catch (error) {
+        console.error('Login error:', error);
+        setServerError('Something went wrong. Please try again.');
+      }
     }
   };
 
@@ -76,7 +100,11 @@ const Login = () => {
           </div>
           {errors.password && <p className={styles.error}>{errors.password}</p>}
 
+          {/* Server error */}
+          {serverError && <p className={styles.error}>{serverError}</p>}
+
           <button type="submit">Login</button>
+
           <div className={styles.links}>
             <a href="/forgot-password">Forgot Password?</a>
             <span> | </span>

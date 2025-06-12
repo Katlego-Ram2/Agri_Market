@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomerSidebar from './CustomerSidebar';
 import CustomerTopCards from './CustomerTopCards';
 import ShoppingCartModal from './ShoppingCartModal';
-import PurchaseHistory from './PurchaseHistory';  // existing
-import AnalyticsDashboard from './AnalyticsDashboard'; // new import
-import Profile from './Profile';  // new import
+import PurchaseHistory from './PurchaseHistory';
+import AnalyticsDashboard from './AnalyticsDashboard';
+import Profile from './Profile';
 import './Dashboard.css';
 
 const StockTable = ({ stocks }) => {
@@ -79,6 +80,16 @@ const StockTable = ({ stocks }) => {
 };
 
 const CustomerDashboard = () => {
+  const navigate = useNavigate();
+
+  // 🔐 Redirect to login if not authenticated
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedDetail, setSelectedDetail] = useState('home');
   const [showCartModal, setShowCartModal] = useState(false);
@@ -117,7 +128,6 @@ const CustomerDashboard = () => {
     { id: 'P003', name: 'Corn', description: 'Sweet corn', price: 3.0, available: 75 },
   ];
 
-  // Dummy purchase history data
   const purchaseHistoryData = [
     { date: '2025-05-01', item: 'Cattle', quantity: 2, price: 12000 },
     { date: '2025-05-03', item: 'Apples', quantity: 50, price: 2.5 },
@@ -172,20 +182,8 @@ const CustomerDashboard = () => {
         <h2 style={styles.title}>🛒 Welcome to Agri Market</h2>
         <p style={styles.subtitle}>Choose a category to get started</p>
         <div style={styles.buttonGroup}>
-          <button
-            onClick={() => setSelectedDetail('livestock')}
-            style={styles.button}
-            type="button"
-          >
-            🐄 Livestock
-          </button>
-          <button
-            onClick={() => setSelectedDetail('freshproduce')}
-            style={styles.button}
-            type="button"
-          >
-            🥬 Fresh Produce
-          </button>
+          <button onClick={() => setSelectedDetail('livestock')} style={styles.button}>🐄 Livestock</button>
+          <button onClick={() => setSelectedDetail('freshproduce')} style={styles.button}>🥬 Fresh Produce</button>
         </div>
       </div>
     );
@@ -201,7 +199,7 @@ const CustomerDashboard = () => {
         return <PurchaseHistory history={purchaseHistoryData} />;
       case 'analytics':
         return <AnalyticsDashboard />;
-      case 'profile':       // Added profile case here
+      case 'profile':
         return <Profile />;
       default:
         return renderLandingScreen();

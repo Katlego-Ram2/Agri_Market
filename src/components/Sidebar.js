@@ -16,8 +16,8 @@ const Sidebar = ({ isOpen, toggleSidebar, onSelect }) => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    // Add logout logic if needed
-    navigate('/');
+    localStorage.clear(); // ✅ Clear localStorage on logout
+    navigate('/');        // 🔄 Redirect to home or login page
   };
 
   return (

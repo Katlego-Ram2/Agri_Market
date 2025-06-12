@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';  // <-- Import useNavigate
 import Sidebar from './Sidebar';
 import TopCards from './TopCards';
 import AnalyticsDashboard from './AnalyticsDashboard';
@@ -12,6 +13,16 @@ import Profile from './Profile';  // <-- Import Profile component
 import './Dashboard.css';
 
 const Dashboard = () => {
+  const navigate = useNavigate(); // <-- initialize navigate
+
+  // Authentication check and redirect if no userId
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      navigate('/login'); // redirect to login if no userId found
+    }
+  }, [navigate]);
+
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedDetail, setSelectedDetail] = useState(null);
 

@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Profile = () => {
+  const userId = localStorage.getItem('userId');
+
   const [formData, setFormData] = useState({
     fullName: '',
     username: '',
@@ -11,15 +14,46 @@ const Profile = () => {
     confirmPassword: '',
   });
 
+  useEffect(() => {
+    if (userId) {
+      axios.get(`http://localhost:5000/user/${userId}`)
+        .then(res => {
+          const { full_name, username, email, phone, communication } = res.data;
+          setFormData(prev => ({
+            ...prev,
+            fullName: full_name,
+            username,
+            email,
+            phone,
+            communication,
+          }));
+        })
+        .catch(err => {
+          console.error('Error loading profile:', err);
+        });
+    }
+  }, [userId]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you could add validation and update logic, e.g., API call
-    alert('Profile updated successfully!');
+    if (formData.password && formData.password !== formData.confirmPassword) {
+      return alert("Passwords do not match.");
+    }
+
+    try {
+      await axios.put(`http://localhost:5000/user/${userId}`, formData);
+      alert("Profile updated successfully!");
+      // Clear passwords on successful update
+      setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
+    } catch (err) {
+      console.error("Update failed:", err);
+      alert("Failed to update profile.");
+    }
   };
 
   return (
@@ -34,6 +68,7 @@ const Profile = () => {
             value={formData.fullName}
             onChange={handleChange}
             style={styles.input}
+            required
           />
         </label>
 
@@ -45,6 +80,7 @@ const Profile = () => {
             value={formData.username}
             onChange={handleChange}
             style={styles.input}
+            required
           />
         </label>
 
@@ -56,6 +92,7 @@ const Profile = () => {
             value={formData.email}
             onChange={handleChange}
             style={styles.input}
+            required
           />
         </label>
 
@@ -67,6 +104,7 @@ const Profile = () => {
             value={formData.phone}
             onChange={handleChange}
             style={styles.input}
+            required
           />
         </label>
 
@@ -79,6 +117,7 @@ const Profile = () => {
             onChange={handleChange}
             style={styles.input}
             placeholder="e.g., Email, SMS"
+            required
           />
         </label>
 
@@ -90,6 +129,7 @@ const Profile = () => {
             value={formData.password}
             onChange={handleChange}
             style={styles.input}
+            placeholder="Leave blank to keep current password"
           />
         </label>
 
@@ -101,6 +141,7 @@ const Profile = () => {
             value={formData.confirmPassword}
             onChange={handleChange}
             style={styles.input}
+            placeholder="Confirm new password"
           />
         </label>
 
