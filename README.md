@@ -1,5 +1,4 @@
-# Agri Market – Customer Dashboard
-
+# Agri Market
 A responsive web application for managing agricultural market purchases, including fresh produce and livestock. Built with React, Express.js, and MySQL, this dashboard allows customers to browse available stock, manage their cart, view purchase history, and analyze buying patterns.
 
 ## 🧱 Tech Stack
