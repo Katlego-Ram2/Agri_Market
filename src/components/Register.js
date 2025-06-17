@@ -90,12 +90,12 @@ const Register = () => {
     setServerError(null);
     setSuccessMessage(null);
 
-    // Validate all fields before submitting
+ 
     Object.keys(formData).forEach((field) =>
       validateField(field, formData[field])
     );
 
-    // Check if there are any errors
+
     const hasErrors = Object.values(errors).some((error) => error);
     if (hasErrors) {
       return;
@@ -128,7 +128,7 @@ const Register = () => {
         setConfirmTouched(false);
       } else {
         if (data.errors) {
-          // Show validation errors from server
+        
           setErrors(data.errors);
         } else if (data.message) {
           setServerError(data.message);

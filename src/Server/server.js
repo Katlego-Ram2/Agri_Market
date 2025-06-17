@@ -1,12 +1,12 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
-const bcrypt = require('bcrypt'); // For hashing passwords
+const bcrypt = require('bcrypt');
 const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Replace with your actual URI - keep secret in env variables!
+
 const uri = "mongodb+srv://Agri:Echo@agri.ek14abh.mongodb.net/Agri?retryWrites=true&w=majority";
 
 const client = new MongoClient(uri);
@@ -56,7 +56,7 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ errors });
     }
 
-    // Check if username or email already exists
+   
     const existingUser = await usersCollection.findOne({
       $or: [
         { username: formData.username },
@@ -81,7 +81,7 @@ app.post('/register', async (req, res) => {
       createdAt: new Date()
     };
 
-    // Insert into DB
+
     const result = await usersCollection.insertOne(newUser);
 
     res.status(201).json({ message: "User registered successfully", userId: result.insertedId });

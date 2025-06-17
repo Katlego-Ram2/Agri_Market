@@ -7,8 +7,8 @@ async function connectToMongo() {
   try {
     await client.connect();
     console.log("✅ Connected to MongoDB Atlas");
-    const db = client.db("Agri"); // Use the right DB name
-    // You can do some queries here, e.g. list collections
+    const db = client.db("Agri"); 
+  
     const collections = await db.listCollections().toArray();
     console.log("Collections:", collections);
     return db;
