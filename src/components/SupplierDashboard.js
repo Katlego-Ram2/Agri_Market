@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import SupplierSidebar from './SupplierSidebar';
 import SupplierTopCards from './SupplierTopCards';
 import SupplierAnalytics from './SupplierAnalytics';
-import SupplierStockPurchased from './SupplierStockPurchased'; // ✅ NEW
-import Profile from './Profile';  // <-- Added import for Profile component
+import SupplierStockPurchased from './SupplierStockPurchased'; 
+import Profile from './Profile'; 
 import './Dashboard.css';
 
 const SupplierDashboard = () => {
